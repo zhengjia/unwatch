@@ -1,0 +1,7 @@
+unwatch filters your watched repository based on the date of last push. 
+
+Currently the github interface showing your watched repository is not very user friendly. If you are watching a lot of repository and don't remember what the funny names are about, you have to visit the repository to figure out.
+
+unwatch provides a simple interface to show the descriptions of your watched repositories and filter based on a given last push date, so you can more easily unwatch an outdated repository that you follow impulsively.
+
+unwatch is built with Sinatra.
