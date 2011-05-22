@@ -1,3 +1,5 @@
+source :rubygems
+
 gem 'oauth2', '0.4.1'
 gem 'json', '1.5.1'
 gem 'sinatra', '1.2.3'
