@@ -11,11 +11,12 @@ class Unwatch < Sinatra::Base
       set :secret, ENV['secret']
     else  
       config = YAML::load(File.open('oauth.yml'))
-      set :client_id, config['client_id']
-      set :secret, config['secret']
+      set :client_id, config['development']['client_id']
+      set :secret, config['development']['secret']
     end  
     enable :sessions unless test?
-    enable :static
+    set :static, true
+    set :public, 'public'
     set :session_secret, "unwatch" # shotgun bug
   end
   
