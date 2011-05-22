@@ -15,6 +15,7 @@ class Unwatch < Sinatra::Base
       set :secret, config['secret']
     end  
     enable :sessions unless test?
+    enable :static
     set :session_secret, "unwatch" # shotgun bug
   end
   
