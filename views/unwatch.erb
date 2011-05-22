@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/css/blue/style.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
+    <script>window.jQuery || document.write(unescape('%3Cscript src="/jquery.js"%3E%3C/script%3E'))</script>
+    <script src="/jquery.tablesorter.min.js"></script>
+    <script src="/unwatch.js"></script>
+  </head>  
+  <body>
+    <div>Username: <%= @username %></div>
+    <div>
+      <table class="tablesorter">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Owner</th>
+            <th>Watchers</th>
+            <th>Forks</th>
+            <th>Pushed At</th>
+            <th>Action</th>
+          </tr>  
+        </thead>  
+        <tbody>  
+          <% @watched["repositories"].each do |repository| %>
+            <tr>
+              <td><%= repository["name"]%></td>
+              <td><%= repository["description"]%></td>
+              <td><%= repository["owner"]%></td>
+              <td><%= repository["watchers"]%></td>
+              <td><%= repository["forks"]%></td>
+              <td><%= Time.parse(repository["pushed_at"]).strftime("%m/%d/%Y") %></td>
+              <td><a href=<%= "/unwatch/#{repository["owner"]}/#{repository['name']}" %>>Unwatch</td>
+            </tr>  
+          <% end %>
+        </tbody>  
+      </table>  
+    </div>
+  </body>
+</html>  
