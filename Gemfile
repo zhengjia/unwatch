@@ -5,5 +5,4 @@ gem 'sinatra', '1.2.3'
 
 group :test do
   gem 'rack-test', '0.6.0'
-  gem 'mocha', '0.9.12'
 end
