@@ -23,7 +23,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (= 1.0.12)
   json (= 1.5.1)
   oauth2 (= 0.4.1)
   rack-test (= 0.6.0)
