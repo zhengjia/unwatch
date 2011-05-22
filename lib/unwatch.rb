@@ -32,8 +32,10 @@ class Unwatch < Sinatra::Base
     def send_request(uri)
       begin
         JSON.parse(access_token.get(uri))
-      rescue OAuth2::HTTPError
+      # OAuth2::AccessDenied: the repository isn't watched by the user  
+      rescue OAuth2::HTTPError, OAuth2::AccessDenied
         session[:access_token] = nil
+        status 503
         halt %(<p>#{$!}</p><p><a href="/auth/github">Retry</a></p>)
       end
     end
@@ -68,21 +70,25 @@ class Unwatch < Sinatra::Base
 
   get "/" do
     if session[:access_token]
-      redirect '/unwatch'
+      redirect '/list'
     end  
     erb :index
   end
   
-  get '/unwatch' do
+  get '/list' do
     has_access
     get_init_data
     erb :unwatch
   end
   
-  get '/unwatch/:username/:repo' do
+  post '/unwatch/:username/:repo' do
     if params[:username] && params[:repo]
       unwatch_repo(params[:username], params[:repo])
-      redirect '/unwatch'
+      repo_str = "#{params[:username]}/#{params[:repo]}"
+      "Successfully unwatched #{repo_str}"
+    else
+      status 503  
+      halt "Failed to unwatch #{repo_str}"
     end  
   end
 
@@ -97,6 +103,7 @@ class Unwatch < Sinatra::Base
     if session[:access_token]
       redirect '/'
     else
+      status 401
       halt %(<p>Please authorize on github.</p><p><a href="/auth/github">Retry</a></p>)
     end    
   end

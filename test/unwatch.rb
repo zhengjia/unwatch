@@ -10,7 +10,7 @@ class UnwatchTest < Test::Unit::TestCase
   def test_index_authorized
     get '/', {}, 'rack.session' => { :access_token => 'dummy' }
     assert_equal 302, last_response.status
-    assert_equal "http://unwatch.heroku.com/unwatch", last_response.location
+    assert_equal "http://unwatch.heroku.com/list", last_response.location
   end
   
   def test_redirect_to_github_for_authentication
@@ -41,7 +41,7 @@ class UnwatchTest < Test::Unit::TestCase
   
   def test_github_callback_unauthorized
     get '/auth/github/callback'
-    assert_equal 200, last_response.status
+    assert_equal 401, last_response.status
     assert_match "Retry", last_response.body
   end
   
@@ -60,13 +60,13 @@ class UnwatchTest < Test::Unit::TestCase
     assert_equal "http://unwatch.heroku.com/", last_response.location
   end
   
-  def test_unwatch_unauthorized
-    get '/unwatch'
+  def test_list_unauthorized
+    get '/list'
     assert_equal 302, last_response.status
     assert_equal "http://unwatch.heroku.com/", last_response.location
   end
   
-  def test_unwatch_authorized
+  def test_list_authorized
     mock_app(Unwatch) do
       helpers do
         def get_init_data
@@ -75,7 +75,7 @@ class UnwatchTest < Test::Unit::TestCase
         end
       end  
     end
-    get '/unwatch', {}, 'rack.session' => { :access_token => 'dummy' }
+    get '/list', {}, 'rack.session' => { :access_token => 'dummy' }
     assert_equal 200, last_response.status
   end
   
@@ -87,7 +87,7 @@ class UnwatchTest < Test::Unit::TestCase
       end  
     end
     get '/unwatch/zhengjia/unwatch'
-    assert_equal 302, last_response.status
+    assert_equal 200, last_response.status
   end
 
 end

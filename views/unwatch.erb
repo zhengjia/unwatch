@@ -7,6 +7,7 @@
     <script src="/unwatch.js"></script>
   </head>  
   <body>
+    <div id="notice" style="width: 100%; background-color: #EAE9E4"></div>
     <div>Username: <%= @username %></div>
     <div>
       <table class="tablesorter">
@@ -24,13 +25,13 @@
         <tbody>  
           <% @watched["repositories"].each do |repository| %>
             <tr>
-              <td><%= repository["name"]%></td>
+              <td><a href='<%= "http://github.com/#{repository["owner"]}/#{repository["name"]}" %>'><%= repository["name"]%></td>
               <td><%= repository["description"]%></td>
               <td><%= repository["owner"]%></td>
               <td><%= repository["watchers"]%></td>
               <td><%= repository["forks"]%></td>
               <td><%= Time.parse(repository["pushed_at"]).strftime("%m/%d/%Y") %></td>
-              <td><a href=<%= "/unwatch/#{repository["owner"]}/#{repository['name']}" %>>Unwatch</td>
+              <td><a href='#' data-username='<%= repository["owner"]%>' data-repo='<%= repository["name"] %>' class="unwatchLink">Unwatch</td>
             </tr>  
           <% end %>
         </tbody>  
