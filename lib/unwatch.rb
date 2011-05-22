@@ -100,5 +100,3 @@ class Unwatch < Sinatra::Base
   end
   
 end
-
-# repos/unwatch/:user/:repo
