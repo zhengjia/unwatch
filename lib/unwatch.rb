@@ -6,9 +6,14 @@ require 'yaml'
 class Unwatch < Sinatra::Base
   
   configure do
-    config = YAML::load(File.open('oauth.yml'))
-    set :client_id, config['client_id']
-    set :secret, config['secret']
+    if production?
+      set :client_id, ENV['client_id']
+      set :secret, ENV['secret']
+    else  
+      config = YAML::load(File.open('oauth.yml'))
+      set :client_id, config['client_id']
+      set :secret, config['secret']
+    end  
     enable :sessions unless test?
     set :session_secret, "unwatch" # shotgun bug
   end
