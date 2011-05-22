@@ -25,7 +25,7 @@ $(document).ready(function(){
 		var date = Date.parse(date_str)
 		if( jQuery.trim( date_str ) != "" ){
 			$(".pushDate").each(function(){
-				if(Date.parse( $(this).text() ) < date){
+				if(Date.parse( $(this).text() ) > date){
 					$(this).parent().hide();
 				}
 			})
