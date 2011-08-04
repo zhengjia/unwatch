@@ -1,5 +1,9 @@
+unwatch
+-------
 unwatch filters your watched repository based on the date of last push. 
 
+screenshot
+----------
 ![unwatch](https://github.com/zhengjia/unwatch/raw/master/screenshot/screenshot1.png "unwatch")
 
 Currently the github interface showing your watched repository is not very user friendly. If you are watching a lot of repository and don't remember what the funny names are about, you have to visit the repository to figure out.
