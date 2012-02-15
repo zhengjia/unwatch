@@ -5,7 +5,7 @@ require 'yaml'
 
 class Unwatch < Sinatra::Base
   
-  set :views, [File.expand_path('../views', File.dirname(__FILE__) )]
+  set :views, [File.expand_path('../views', File.dirname(__FILE__))]
   
   configure do
     if production?

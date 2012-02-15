@@ -1,9 +1,9 @@
 source :rubygems
 
-gem 'oauth2', '0.4.1'
-gem 'json', '1.5.1'
-gem 'sinatra', '1.2.3'
+gem 'oauth2'
+gem 'json'
+gem 'sinatra'
 
 group :test do
-  gem 'rack-test', '0.6.0'
+  gem 'rack-test'
 end
