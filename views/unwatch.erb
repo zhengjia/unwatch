@@ -31,7 +31,7 @@
         <tbody>  
           <% @watched.each do |repository| %>
             <tr>
-              <td><a href='<%= "http://github.com/#{repository["owner"]}/#{repository["name"]}" %>'><%= repository["name"]%></td>
+              <td><a href='<%= "http://github.com/#{repository["owner"]["login"]}/#{repository["name"]}" %>'><%= repository["name"]%></td>
               <td><%= repository["description"]%></td>
               <td><%= repository["owner"]["login"]%></td>
               <td><%= repository["watchers"]%></td>
