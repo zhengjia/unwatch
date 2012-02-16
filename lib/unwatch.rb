@@ -5,7 +5,7 @@ require 'oauth2'
 require 'json'
 require 'yaml'
 
-if ENV['RACK_ENV'] != 'development'
+if ENV['RACK_ENV'] == 'development'
   require 'pry'
 end  
 
