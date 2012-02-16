@@ -38,13 +38,7 @@ class UnwatchTest < Test::Unit::TestCase
     follow_redirect!
     assert_equal "http://unwatch.heroku.com/auth/github/callback", last_request.params['redirect_uri']
   end
-  
-  def test_github_callback_unauthorized
-    get '/auth/github/callback'
-    assert_equal 401, last_response.status
-    assert_match "Retry", last_response.body
-  end
-  
+
   def test_github_callback_authorized
     
     mock_app(Unwatch) do
@@ -86,7 +80,7 @@ class UnwatchTest < Test::Unit::TestCase
         end
       end  
     end
-    get '/unwatch/zhengjia/unwatch'
+    post '/unwatch/zhengjia/unwatch'
     assert_equal 200, last_response.status
   end
 

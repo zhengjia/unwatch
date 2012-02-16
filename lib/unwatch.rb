@@ -1,7 +1,13 @@
+ENV['RACK_ENV'] ||= 'development'
+
 require 'sinatra/base'
 require 'oauth2'
 require 'json'
 require 'yaml'
+
+if ENV['RACK_ENV'] != 'development'
+  require 'pry'
+end  
 
 class Unwatch < Sinatra::Base
   
@@ -15,27 +21,31 @@ class Unwatch < Sinatra::Base
       config = YAML::load(File.open('oauth.yml'))
       set :client_id, config['development']['client_id']
       set :secret, config['development']['secret']
-    end  
+    end
     enable :sessions unless test?
     set :static, true
-    set :public, 'public'
+    set :public_folder, 'public'
     set :session_secret, "unwatch" # shotgun bug
   end
   
   helpers do
     def client
-      @client ||= OAuth2::Client.new(settings.client_id, settings.secret, :site => 'https://github.com', :authorize_path => '/login/oauth/authorize', :access_token_path => '/login/oauth/access_token')
+      if !session[:access_token]
+        @auth_client ||= OAuth2::Client.new(settings.client_id, settings.secret, :site => 'https://github.com', :authorize_url => '/login/oauth/authorize', :token_url => '/login/oauth/access_token')
+      else
+        @api_client ||= OAuth2::Client.new(settings.client_id, settings.secret, :site => 'https://api.github.com')
+      end    
     end
     
     def access_token
-      @client ||= OAuth2::AccessToken.new(client, session[:access_token])
+      @access_token ||= OAuth2::AccessToken.new(client, session[:access_token])
     end
     
-    def send_request(uri)
+    def send_request(uri, method='get')
       begin
-        JSON.parse(access_token.get(uri))
-      # OAuth2::AccessDenied: the repository isn't watched by the user  
-      rescue OAuth2::HTTPError, OAuth2::AccessDenied
+        oauth_response = access_token.send(method, uri, headers)
+        JSON.parse(oauth_response.body) unless oauth_response.body.empty?
+      rescue OAuth2::Error
         session[:access_token] = nil
         status 503
         halt %(<p>#{$!}</p><p><a href="/auth/github">Retry</a></p>)
@@ -43,12 +53,30 @@ class Unwatch < Sinatra::Base
     end
     
     def get_init_data
-      @username = send_request('/api/v2/json/user/show')['user']['login']
-      @watched = send_request("/api/v2/json/repos/watched/#{@username}")
+      @watched = []
+      @username = send_request('/user')['login']
+      @watched = walk_repos
+    end
+    
+    def walk_repos
+      page = 1
+      results = []
+      res = []
+      begin
+        res = send_request("/users/#{@username}/watched?page=#{page}")
+        puts res.inspect
+        results.concat res
+        page = page + 1
+      end while !res.empty?
+      results
+    end
+    
+    def headers
+      {'Accept' => 'application/vnd.github.3+json'}
     end
     
     def unwatch_repo(username, repo)
-      send_request("/api/v2/json/repos/unwatch/#{username}/#{repo}")
+      send_request("/user/watched/#{username}/#{repo}", 'delete')
     end
     
     def redirect_uri(path = '/auth/github/callback', query = nil)
@@ -59,7 +87,7 @@ class Unwatch < Sinatra::Base
     end
     
     def get_token(code)
-      client.web_server.get_access_token(code, :redirect_uri => redirect_uri).token
+      client.auth_code.get_token(code, :redirect_uri => redirect_uri).token
     end
     
     def has_access
@@ -95,7 +123,7 @@ class Unwatch < Sinatra::Base
   end
 
   get '/auth/github' do
-    url = client.web_server.authorize_url(:redirect_uri => redirect_uri, :scope => 'public_repo')
+    url = client.auth_code.authorize_url(:redirect_uri => redirect_uri, :scope => 'public_repo')
     redirect url
   end
 

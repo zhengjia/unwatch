@@ -11,3 +11,15 @@ Currently the github interface showing your watched repository is not very user 
 unwatch provides a simple interface to show the descriptions of your watched repositories and filter based on a given last push date, so you can more easily unwatch an outdated repository that you follow impulsively.
 
 unwatch is built with Sinatra.
+
+development setup
+-----------------
+1. git clone git://github.com/zhengjia/unwatch.git
+2. Register unwatch at https://github.com/account/applications/. You can name is unwatch-development; The url is a local ip like http://127.0.0.1:9292; callback is http://127.0.0.1:9292/auth/github/callback;
+3. Copy oauth_example.yml to oauth.yml. Add you development client_id and secret obtained from step 2.
+4. run test: ruby -Itest test/unwatch.rb
+5. rackup
+
+production setup
+----------------
+Set the environment variable ENV['RACK_ENV'] to 'production'. Set the oauth credentials ENV['client_id'] and ENV['secret'].
