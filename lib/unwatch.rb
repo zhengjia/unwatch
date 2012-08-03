@@ -48,7 +48,6 @@ class Unwatch < Sinatra::Base
       rescue OAuth2::Error => e
         session[:access_token] = nil
         status 503
-        puts e.inspect
         halt %(<p>#{$!}</p><p><a href="/auth/github">Retry</a></p>)
       end
     end
