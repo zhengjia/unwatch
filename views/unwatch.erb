@@ -29,19 +29,10 @@
           </tr>  
         </thead>  
         <tbody>  
-          <% @watched.each do |repository| %>
-            <tr>
-              <td><a href='<%= "http://github.com/#{repository["owner"]["login"]}/#{repository["name"]}" %>'><%= repository["name"]%></td>
-              <td><%= repository["description"]%></td>
-              <td><%= repository["owner"]["login"]%></td>
-              <td><%= repository["watchers"]%></td>
-              <td><%= repository["forks"]%></td>
-              <td class='pushDate'><%= Time.parse(repository["pushed_at"]).strftime("%m/%d/%Y") %></td>
-              <td><a href='#' data-username='<%= repository["owner"]["login"]%>' data-repo='<%= repository["name"] %>' class="unwatchLink">Unwatch</td>
-            </tr>  
-          <% end %>
+          <%= erb :repositories %>
         </tbody>  
       </table>  
     </div>
+    <a href="#" id='loadMore'>Load More</a>
   </body>
 </html>  

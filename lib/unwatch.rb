@@ -55,19 +55,7 @@ class Unwatch < Sinatra::Base
     def get_init_data
       @watched = []
       @username = send_request('/user')['login']
-      @watched = walk_repos
-    end
-    
-    def walk_repos
-      page = 1
-      results = []
-      res = []
-      begin
-        res = send_request("/users/#{@username}/watched?page=#{page}")
-        results.concat res
-        page = page + 1
-      end while !res.empty?
-      results
+      @watched = send_request("/users/#{@username}/watched?page=#{@page}")
     end
     
     def headers
@@ -104,10 +92,15 @@ class Unwatch < Sinatra::Base
     erb :index
   end
   
-  get '/list' do
+  get '/list/?:page?' do
+    @page = params[:page] || 1
     has_access
     get_init_data
-    erb :unwatch
+    if params[:load_more]
+      erb :repositories
+    else  
+      erb :unwatch
+    end  
   end
   
   post '/unwatch/:username/:repo' do
