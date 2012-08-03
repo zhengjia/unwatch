@@ -1,6 +1,10 @@
 unwatch
 -------
-unwatch filters your watched repository based on the date of last push. 
+unwatch filters your watched repository based on the date of last push.
+
+demo
+----
+A demo is at [http://unwatch.heroku.com](http://unwatch.heroku.com). If you get an error when accessing the demo, it's likely because unwatch tries to load too many repositories and reaches Heroku's a 30 seconds execution limit. Please try running unwatch locally, or check out the [pagination](https://github.com/tstmedia/ngin/tree/pagination) branch.
 
 screenshot
 ----------
