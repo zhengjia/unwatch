@@ -64,7 +64,6 @@ class Unwatch < Sinatra::Base
       res = []
       begin
         res = send_request("/users/#{@username}/watched?page=#{page}")
-        puts res.inspect
         results.concat res
         page = page + 1
       end while !res.empty?
