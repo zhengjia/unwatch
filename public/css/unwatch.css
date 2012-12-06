@@ -1,0 +1,9 @@
+table.tablesorter {
+  font-size: 12px;
+}
+table.tablesorter tbody tr:hover { 
+  background: #EAE9E4; 
+}
+table.tablesorter tbody tr {
+	background-color: #FFF;
+}

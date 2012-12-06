@@ -2,6 +2,7 @@
   <head>
     <link type="text/css" rel="stylesheet" href="/css/blue/style.css">
     <link type="text/css" rel="stylesheet" href="/css/jquery-ui/jquery-ui-1.8.13.custom.css">
+    <link type="text/css" rel="stylesheet" href="/css/unwatch.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
     <script>window.jQuery || document.write(unescape('%3Cscript src="/jquery.js"%3E%3C/script%3E'))</script>
@@ -10,7 +11,7 @@
     <script src="/unwatch.js"></script>
   </head>  
   <body>
-    <div id="notice" style="width: 100%; background-color: #EAE9E4"></div>
+    <div id="notice" style="width: 100%; background-color: red"></div>
     <div>Username: <%= @username %></div>
     <div>
       Repositories pushed before: <input type="text" id="datePicker" />
@@ -31,13 +32,13 @@
         <tbody>  
           <% @watched.each do |repository| %>
             <tr>
-              <td><a href='<%= "http://github.com/#{repository["owner"]["login"]}/#{repository["name"]}" %>'><%= repository["name"]%></td>
+              <td><a href='<%= "http://github.com/#{repository["owner"]["login"]}/#{repository["name"]}" %>'><%= repository["name"]%></a></td>
               <td><%= repository["description"]%></td>
               <td><%= repository["owner"]["login"]%></td>
               <td><%= repository["watchers"]%></td>
               <td><%= repository["forks"]%></td>
               <td class='pushDate'><%= Time.parse(repository["pushed_at"]).strftime("%m/%d/%Y") %></td>
-              <td><a href='#' data-username='<%= repository["owner"]["login"]%>' data-repo='<%= repository["name"] %>' class="unwatchLink">Unwatch</td>
+              <td><a href='#' data-username='<%= repository["owner"]["login"]%>' data-repo='<%= repository["name"] %>' class="unwatchLink">Unwatch</a></td>
             </tr>  
           <% end %>
         </tbody>  
