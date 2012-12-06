@@ -45,9 +45,10 @@ class Unwatch < Sinatra::Base
       begin
         oauth_response = access_token.send(method, uri, headers)
         JSON.parse(oauth_response.body) unless oauth_response.body.empty?
-      rescue OAuth2::Error
+      rescue OAuth2::Error => e
         session[:access_token] = nil
         status 503
+        puts e.inspect
         halt %(<p>#{$!}</p><p><a href="/auth/github">Retry</a></p>)
       end
     end
