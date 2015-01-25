@@ -8,7 +8,7 @@ Updates:  Due to [high demand](https://twitter.com/danieljohngrant/status/553099
 
 demo
 ----
-A demo is at [http://unwatch.heroku.com](http://unwatch.heroku.com). If you get an error when accessing the demo, it's likely because unwatch tries to load too many repositories and reaches Heroku's a 30 seconds execution limit. Please try running unwatch locally.
+A demo is at [http://unwatch.heroku.com](http://unwatch.herokuapp.com). If you get an error when accessing the demo, it's likely because unwatch tries to load too many repositories and reaches Heroku's a 30 seconds execution limit. Please try running unwatch locally.
 
 screenshot
 ----------
