@@ -7,17 +7,17 @@ require 'yaml'
 
 if ENV['RACK_ENV'] == 'development'
   require 'pry'
-end  
+end
 
 class Unwatch < Sinatra::Base
-  
+
   set :views, [File.expand_path('../views', File.dirname(__FILE__))]
-  
+
   configure do
     if production?
       set :client_id, ENV['client_id']
       set :secret, ENV['secret']
-    else  
+    else
       config = YAML::load(File.open('oauth.yml'))
       set :client_id, config['development']['client_id']
       set :secret, config['development']['secret']
@@ -27,20 +27,20 @@ class Unwatch < Sinatra::Base
     set :public_folder, 'public'
     set :session_secret, "unwatch" # shotgun bug
   end
-  
+
   helpers do
     def client
       if !session[:access_token]
         @auth_client ||= OAuth2::Client.new(settings.client_id, settings.secret, :site => 'https://github.com', :authorize_url => '/login/oauth/authorize', :token_url => '/login/oauth/access_token')
       else
         @api_client ||= OAuth2::Client.new(settings.client_id, settings.secret, :site => 'https://api.github.com')
-      end    
+      end
     end
-    
+
     def access_token
       @access_token ||= OAuth2::AccessToken.new(client, session[:access_token])
     end
-    
+
     def send_request(uri, method='get')
       begin
         oauth_response = access_token.send(method, uri, headers)
@@ -52,13 +52,13 @@ class Unwatch < Sinatra::Base
         halt %(<p>#{$!}</p><p><a href="/auth/github">Retry</a></p>)
       end
     end
-    
+
     def get_init_data
       @watched = []
       @username = send_request('/user')['login']
       @watched = walk_repos
     end
-    
+
     def walk_repos
       page = 1
       results = []
@@ -70,56 +70,56 @@ class Unwatch < Sinatra::Base
       end while !res.empty?
       results
     end
-    
+
     def headers
       {'Accept' => 'application/vnd.github.3+json'}
     end
-    
+
     def unwatch_repo(username, repo)
       send_request("/user/watched/#{username}/#{repo}", 'delete')
     end
-    
+
     def redirect_uri(path = '/auth/github/callback', query = nil)
       uri = URI.parse(request.url)
       uri.path  = path
       uri.query = query
       uri.to_s
     end
-    
+
     def get_token(code)
       client.auth_code.get_token(code, :redirect_uri => redirect_uri).token
     end
-    
+
     def has_access
       unless session[:access_token]
         redirect '/'
       end
     end
-    
+
   end
 
   get "/" do
     if session[:access_token]
       redirect '/list'
-    end  
+    end
     erb :index
   end
-  
+
   get '/list' do
     has_access
     get_init_data
     erb :unwatch
   end
-  
+
   post '/unwatch/:username/:repo' do
     if params[:username] && params[:repo]
       unwatch_repo(params[:username], params[:repo])
       repo_str = "#{params[:username]}/#{params[:repo]}"
       "Successfully unwatched #{repo_str}"
     else
-      status 503  
+      status 503
       halt "Failed to unwatch #{repo_str}"
-    end  
+    end
   end
 
   get '/auth/github' do
@@ -135,7 +135,7 @@ class Unwatch < Sinatra::Base
     else
       status 401
       halt %(<p>Please authorize on github.</p><p><a href="/auth/github">Retry</a></p>)
-    end    
+    end
   end
-  
+
 end

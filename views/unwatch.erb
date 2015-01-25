@@ -9,7 +9,7 @@
     <script>window.jQuery || document.write(unescape('%3Cscript src="/jquery-ui.min.js"%3E%3C/script%3E'))</script>
     <script src="/jquery.tablesorter.min.js"></script>
     <script src="/unwatch.js"></script>
-  </head>  
+  </head>
   <body>
     <div id="notice" style="width: 100%; background-color: red"></div>
     <div>Username: <%= @username %></div>
@@ -27,9 +27,9 @@
             <th>Forks</th>
             <th>Pushed At</th>
             <th>Action</th>
-          </tr>  
-        </thead>  
-        <tbody>  
+          </tr>
+        </thead>
+        <tbody>
           <% @watched.each do |repository| %>
             <tr>
               <td><a href='<%= "http://github.com/#{repository["owner"]["login"]}/#{repository["name"]}" %>'><%= repository["name"]%></a></td>
@@ -38,11 +38,11 @@
               <td><%= repository["watchers"]%></td>
               <td><%= repository["forks"]%></td>
               <td class='pushDate'><%= Time.parse(repository["pushed_at"]).strftime("%m/%d/%Y") %></td>
-              <td><a href='#' data-username='<%= repository["owner"]["login"]%>' data-repo='<%= repository["name"] %>' class="unwatchLink">Unwatch</a></td>
-            </tr>  
+              <td><a href='#' data-username='<%= repository["owner"]["login"]%>' data-repo='<%= repository["name"] %>' class="unwatchLink">Unstar</a></td>
+            </tr>
           <% end %>
-        </tbody>  
-      </table>  
+        </tbody>
+      </table>
     </div>
   </body>
-</html>  
+</html>

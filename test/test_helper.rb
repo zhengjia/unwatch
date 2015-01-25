@@ -1,7 +1,7 @@
 ENV['RACK_ENV'] = 'test'
 $:.unshift File.expand_path('../lib', File.dirname(__FILE__))
 require 'sinatra/base'
-require 'test/unit'
+require 'test-unit'
 require 'rack/test'
 require 'mocha'
 

@@ -6,6 +6,7 @@ gem 'sinatra'
 
 group :test do
   gem 'rack-test'
+  gem 'test-unit'
 end
 
 group :development do
